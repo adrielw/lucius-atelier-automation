@@ -1,0 +1,52 @@
+name: IG Test Post 20260420-0859
+
+on:
+  schedule:
+    - cron: '19 9 20 4 *'
+  workflow_dispatch:
+
+jobs:
+  post-ig-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Post test image to Instagram
+        env:
+          META_PAGE_TOKEN: ${{ secrets.META_PAGE_TOKEN }}
+        run: |
+          python3 - <<'EOF'
+          import os, requests
+
+          ig_user_id = "17841407373444033"
+          token = os.environ["META_PAGE_TOKEN"]
+
+          image_url = "https://raw.githubusercontent.com/adrielw/lucius-atelier-automation/main/ig-images/test/nb2-shop-reviews_2026-02-23_jeremiah_01-2026-04-17.jpg"
+          caption   = """Nothing upgrades a build like the details nobody notices — until they do. 🔩
+
+#LuciusAtelier #SeikoMod #WatchMod #WatchFam #Seiko
+
+[TEST POST — IGNORE]"""
+
+          # Step 1: Create media container
+          r = requests.post(
+              f"https://graph.facebook.com/v25.0/{ig_user_id}/media",
+              data={
+                  "image_url": image_url,
+                  "caption": caption,
+                  "access_token": token
+              }
+          )
+          print(f"Container response: {r.status_code} {r.text}")
+          r.raise_for_status()
+          creation_id = r.json()["id"]
+          print(f"Container ID: {creation_id}")
+
+          # Step 2: Publish
+          r2 = requests.post(
+              f"https://graph.facebook.com/v25.0/{ig_user_id}/media_publish",
+              data={"creation_id": creation_id, "access_token": token}
+          )
+          print(f"Publish response: {r2.status_code} {r2.text}")
+          r2.raise_for_status()
+          ig_post_id = r2.json()["id"]
+          print(f"✅ IG Test Post published — Post ID: {ig_post_id}")
+          EOF
