@@ -20,8 +20,7 @@ jobs:
           token = os.environ["META_PAGE_TOKEN"]
 
           image_url = "https://raw.githubusercontent.com/adrielw/lucius-atelier-automation/main/ig-images/test/nb2-shop-reviews_2026-02-23_jeremiah_01-2026-04-17.jpg"
-          caption   = """Nothing upgrades a build like the details nobody notices — until they do. 🔩
-
+caption = 'Nothing upgrades a build like the details nobody notices. #LuciusAtelier #SeikoMod #WatchMod #WatchFam #Seiko\n\n[TEST POST - IGNORE]'
 #LuciusAtelier #SeikoMod #WatchMod #WatchFam #Seiko
 
 [TEST POST — IGNORE]"""
